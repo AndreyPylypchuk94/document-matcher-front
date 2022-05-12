@@ -1,0 +1,35 @@
+.ant-table-thead > tr > th.LabelTable {
+    background: #dedddd !important;
+}
+
+.Table {
+    /*height: 200px;*/
+}
+
+table tbody tr td {
+    padding: 1px 0 !important;;
+}
+
+
+/* Scroll */
+
+::-webkit-scrollbar {
+    width: 10px;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-track-piece {
+    background-color: #FFF;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 20px;
+    background-color: #858383;
+    outline: 2px solid #FFF;
+    outline-offset: -2px;
+    border: .1px solid #B7B7B7;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #909090;
+}

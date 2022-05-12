@@ -1,0 +1,70 @@
+.Container[disabled] {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+
+.Title {
+    margin: 10px 0 5px !important;
+    /*background-color: #ffcc99 !important;*/
+    border-radius: 5px;
+    font-weight: bold;
+    border: 1px solid black !important;
+    text-align: center;
+}
+
+.Title::placeholder {
+    color: black !important;
+    opacity: 0.3;
+}
+
+
+.Labels {
+    display: flex;
+    flex-wrap: wrap;
+
+    /*display: grid;*/
+    /*grid-template-columns: repeat(3, 30%);*/
+    /*grid-gap: 3px;*/
+    overflow-y: scroll;
+    overflow-x: hidden;
+    justify-content: center;
+    max-width: 280px;
+    max-height: 400px;
+}
+
+.Labels button {
+    margin: 2px 0;
+    width: 100%;
+    font-size: 0.8em;
+    padding: 2px;
+    height: auto;
+    text-indent: 2px;
+    text-align: left;
+    word-break: break-word;
+    white-space: normal;
+}
+
+/* Scroll */
+
+.Labels::-webkit-scrollbar {
+    width: 10px;
+    border-radius: 10px;
+}
+
+.Labels::-webkit-scrollbar-track-piece {
+    background-color: #FFF;
+}
+
+.Labels::-webkit-scrollbar-thumb {
+    border-radius: 20px;
+    background-color: #858383;
+    outline: 2px solid #FFF;
+    outline-offset: -2px;
+    border: .1px solid #B7B7B7;
+}
+
+.Labels::-webkit-scrollbar-thumb:hover {
+    background-color: #909090;
+}
+

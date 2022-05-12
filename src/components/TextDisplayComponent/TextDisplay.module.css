@@ -1,0 +1,33 @@
+.Container {
+    margin: 10px 0;
+    padding: 10px 5px;
+    border: 2px solid black;
+    border-radius: 10px;
+    background: #dacfcf;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.text {
+    color: red;
+    background: blue;
+}
+
+.Container::-webkit-scrollbar {
+    width: 10px;
+    border-radius: 10px;
+}
+
+.Container::-webkit-scrollbar-track-piece {
+    background-color: transparent;
+}
+
+.Container::-webkit-scrollbar-thumb {
+    border-radius: 20px;
+    background-color: #858383;
+    outline-offset: -2px;
+}
+
+.Container::-webkit-scrollbar-thumb:hover {
+    background-color: #909090;
+}
