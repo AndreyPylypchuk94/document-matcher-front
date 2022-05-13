@@ -17,12 +17,16 @@ export const TextSourceSwitcher = () => {
   };
 
   const onPrevious = () => {
-    dispatch(setTextIds([results[currentItemIndex + 1].id]));
+    dispatch(setTextIds([results[currentItemIndex - 1].id]));
   };
 
   return (
     <div className={s.Container}>
-      <Button disabled={disabledPrevious} style={{ marginRight: 10 }}>
+      <Button
+        onClick={onPrevious}
+        disabled={disabledPrevious}
+        style={{ marginRight: 10 }}
+      >
         Previous source
       </Button>
       <Button onClick={onNext} disabled={disabledNext}>

@@ -2,7 +2,7 @@ import { createSelector } from '@reduxjs/toolkit';
 import { colorText } from '../../utils/colorText';
 
 const selectTexts = (state) => state.app.results;
-const selectWords = (state) => state.app.words;
+export const selectWords = (state) => state.app.words;
 const selectLabels = (state) => state.app.labels;
 const selectTextIds = (state) => state.app.selectedTextIds;
 

@@ -68,13 +68,16 @@ export const ResultsTable = ({ isProcessed, isTableBig }) => {
 
     if (selectedTextIds.includes(record.id)) {
       if (isProcessed) {
-        const filteredArr = record.selectedLabels.filter((o1) =>
+        const filteredArr = record.selectedLabels?.filter((o1) =>
           labels.some((o2) => o1.id === o2.id)
         );
-        const filteredCasesArr = record.selectedCases.filter((o1) =>
+        const filteredCasesArr = record.selectedCases?.filter((o1) =>
           labels.some((o2) => o1.id === o2.id)
         );
-        dispatch(setUserReportForm(filteredCasesArr));
+        if (filteredCasesArr?.length) {
+          const casesId = filteredCasesArr?.map((i) => i.id);
+          dispatch(setUserReportForm(casesId));
+        }
         dispatch(setHumanLabelForm(filteredArr));
       }
       dispatch(resetForm());
@@ -83,16 +86,18 @@ export const ResultsTable = ({ isProcessed, isTableBig }) => {
     }
 
     if (isProcessed) {
-      const filteredArr = record.selectedLabels.filter((o1) =>
+      const filteredArr = record.selectedLabels?.filter((o1) =>
         labels.some((o2) => o1.id === o2.id)
       );
-      const filteredCasesArr = record.selectedCases.filter((o1) =>
-        labels.some((o2) => o1.id === o2.id)
-      );
-      const b = filteredCasesArr.map((i) => i.id);
-      console.log(b);
-      dispatch(setUserReportForm(b));
       dispatch(setHumanLabelForm(filteredArr));
+
+      const filteredCasesArr = record.selectedCases?.filter((o1) =>
+        labels.some((o2) => o1.id === o2.id)
+      );
+      if (filteredCasesArr?.length) {
+        const casesId = filteredCasesArr?.map((i) => i.id);
+        dispatch(setUserReportForm(casesId));
+      }
     }
 
     dispatch(setTextIds([...selectedTextIds, record.id]));

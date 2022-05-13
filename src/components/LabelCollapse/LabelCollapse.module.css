@@ -1,0 +1,21 @@
+.Container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.Container p {
+    margin: 0;
+}
+
+.Form {
+    display: flex;
+    width: 60%;
+    border-radius: 10px;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.Form input {
+}

@@ -14,6 +14,9 @@ const initialState = {
   selectedTextIds: [],
   managementForm: {
     labelId: null,
+    caseId: null,
+    wordId: null,
+    regexpId: null,
   },
   selectedText: {
     id: null,
@@ -46,13 +49,19 @@ export const getLabels = createAsyncThunk('Get labels', async () => {
   return response.data;
 });
 
-export const addWord = createAsyncThunk('Add word', async (word) => {
-  const response = await addWordAPI(word);
+export const addWord = createAsyncThunk('Add word', async (params) => {
+  const { word, regexes, id } = params;
+  await addWordAPI(word, regexes, id);
+
+  const response = await getWordsAPI();
   return response.data;
 });
 
-export const addLabel = createAsyncThunk('Add label', async (label) => {
-  const response = await addLabelAPI(label);
+export const addLabel = createAsyncThunk('Add label', async (params) => {
+  const { label, id, cases } = params;
+  await addLabelAPI(label, id, cases);
+
+  const response = await getLabelsAPI();
   return response.data;
 });
 

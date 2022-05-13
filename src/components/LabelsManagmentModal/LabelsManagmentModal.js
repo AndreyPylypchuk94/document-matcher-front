@@ -1,13 +1,26 @@
-import { Button, Col, Modal, Row } from 'antd';
+import { Button, Col, Collapse, Input, Modal, Row } from 'antd';
 import useModal from '../../hooks/useModal';
-import { AddNewLabelComponent } from '../AddNewLabelComponent/AddNewLabelComponent';
-import { useSelector } from 'react-redux';
-import { setManagementFormLabel } from '../../store/appSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { CollapseTable } from '../CollapseTable/CollapseTable';
+import s from './LabelsManagmentModal.module.css';
+import { useState } from 'react';
+import { addLabel } from '../../store/appSlice';
 
 export const LabelsManagmentModal = () => {
   const { isVisible, openModal, closeModal } = useModal();
+  const dispatch = useDispatch();
+  const { labels, managementForm } = useSelector((s) => s.app);
 
-  const { words, labels } = useSelector((s) => s.app);
+  const [labelName, setLabelName] = useState('');
+
+  const addNewLabel = () => {
+    dispatch(
+      addLabel({
+        label: labelName,
+      })
+    );
+    setLabelName('');
+  };
 
   return (
     <>
@@ -19,37 +32,31 @@ export const LabelsManagmentModal = () => {
         footer={null}
         width={800}
         onCancel={closeModal}
+        destroyOnClose
         closable={false}
       >
         <Row gutter={24}>
-          <Col span={12}>
-            <AddNewLabelComponent
-              title="Label"
-              type="label"
-              tableData={labels}
-              onChange={setManagementFormLabel}
-            />
-          </Col>
-          <Col span={12}>
-            {/*<AddNewLabelComponent*/}
-            {/*  title="Label's cases"*/}
-            {/*  type="word"*/}
-            {/*  tableData={words}*/}
-            {/*/>*/}
+          <Col span={24}>
+            <>
+              <div className={s.Input}>
+                <Input
+                  placeholder="Add new label"
+                  value={labelName}
+                  onChange={(event) => setLabelName(event.target.value)}
+                  onPressEnter={addNewLabel}
+                />
+                <Button onClick={addNewLabel}>Add label</Button>
+              </div>
+              <Collapse defaultActiveKey={['1']}>
+                {labels.map((label) => (
+                  <Collapse.Panel header={label.label} key={label.id}>
+                    <CollapseTable label={label} />
+                  </Collapse.Panel>
+                ))}
+              </Collapse>
+            </>
           </Col>
         </Row>
-        {/*<Row gutter={24}>*/}
-        {/*  <Col span={12}>*/}
-        {/*    <AddNewLabelComponent title="Word" type="word" tableData={words} />*/}
-        {/*  </Col>*/}
-        {/*  <Col span={12}>*/}
-        {/*    <AddNewLabelComponent*/}
-        {/*      title="RegExp"*/}
-        {/*      type="word"*/}
-        {/*      tableData={words}*/}
-        {/*    />*/}
-        {/*  </Col>*/}
-        {/*</Row>*/}
       </Modal>
     </>
   );
