@@ -6,27 +6,56 @@ import { TableViewSwitcher } from './components/TableViewSwitcher/TableViewSwitc
 import s from './styles.module.css';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getLabels, getResults, getWords } from './store/appSlice';
+import {
+  getCategories,
+  getLabels,
+  getResults,
+  getWords,
+} from './store/appSlice';
 import { ProcessedSwitcher } from './components/ProcessedSwitcher/ProcessedSwitcher';
-import { LabelIdsSelect } from './components/labelIdsSelect/LabelIdsSelect';
 import { TextSourceSwitcher } from './components/TextSourceSwitcher/TextSourceSwitcher';
 import { ChangeTableSizeSwitcher } from './components/СhangeTableSizeSwitcher/СhangeTableSizeSwitcher';
 import { SelectedItems } from './components/SelectedItems/SelectedItems';
+import { KnimeButton } from './components/KnimeButton/KnimeButton';
+import { CategoryButton } from './components/CategoryButton/CategoryButton';
+import { getKnimeStatus } from './services/results';
 
 function App() {
   const [isProcessed, setIsProcessed] = useState(false);
   const [isTableBig, setIsTableBig] = useState(false);
+  const [isKnimeActive, setIsKnimeActive] = useState(false);
 
   const [isTableVisible, setIsTableVisible] = useState(true);
+
+  const [labelFilterValue, setLabelFilterValue] = useState('');
+
   const dispatch = useDispatch();
 
-  const { labels } = useSelector((s) => s.app);
+  const { selectedCategory } = useSelector((s) => s.app);
+
+  const checkKnimeStatus = async () => {
+    if (!selectedCategory) return;
+    const response = await getKnimeStatus(selectedCategory);
+    setIsKnimeActive(response);
+  };
 
   useEffect(() => {
     dispatch(getWords());
-    dispatch(getLabels());
-    dispatch(getResults());
+    dispatch(getCategories());
   }, []);
+
+  useEffect(() => {
+    if (!selectedCategory) return;
+    dispatch(getLabels({ categoryId: selectedCategory }));
+    dispatch(getResults({ categoryId: selectedCategory }));
+    setIsProcessed(false);
+  }, [selectedCategory]);
+
+  useEffect(() => {
+    setIsKnimeActive(false);
+    const interval = setInterval(checkKnimeStatus, 5000);
+    return () => clearInterval(interval);
+  }, [selectedCategory]);
 
   return (
     <div className={s.App}>
@@ -34,7 +63,14 @@ function App() {
         <Col span={19}>
           <div className={s.Col}>
             {!isTableVisible && <TextSourceSwitcher />}
-            {isProcessed && <LabelIdsSelect children={labels} />}
+            <CategoryButton />
+            <div>
+              Knime process is
+              <b style={{ paddingLeft: 3 }}>
+                {isKnimeActive ? 'running' : 'not running'}
+              </b>
+            </div>
+            <KnimeButton isKnime={isKnimeActive} setKnime={setIsKnimeActive} />
             <ChangeTableSizeSwitcher
               onClick={setIsTableBig}
               isTableBig={isTableBig}
@@ -43,6 +79,7 @@ function App() {
               isProcessed={isProcessed}
               setIsProcessed={setIsProcessed}
             />
+
             <TableViewSwitcher
               tableHidden={isTableVisible}
               onChange={setIsTableVisible}
@@ -50,12 +87,22 @@ function App() {
           </div>
           <SelectedItems />
           {isTableVisible && (
-            <ResultsTable isTableBig={isTableBig} isProcessed={isProcessed} />
+            <ResultsTable
+              setFilterValue={setLabelFilterValue}
+              isTableBig={isTableBig}
+              isProcessed={isProcessed}
+            />
           )}
-          <TextDisplay height={isTableVisible ? 100 : 560} />
+          <TextDisplay
+            isProccesed={isProcessed}
+            height={isTableVisible ? 100 : 560}
+          />
         </Col>
         <Col span={5}>
-          <LabelingSystem isProcessed={isProcessed} />
+          <LabelingSystem
+            initalValue={labelFilterValue}
+            isProcessed={isProcessed}
+          />
         </Col>
       </Row>
     </div>

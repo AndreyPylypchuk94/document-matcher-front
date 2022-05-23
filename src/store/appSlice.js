@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
   addLabel as addLabelAPI,
   addWord as addWordAPI,
+  getCategories as getCategoriesAPI,
   getLabels as getLabelsAPI,
   getWords as getWordsAPI,
 } from '../services/catalogs';
@@ -11,7 +12,10 @@ const initialState = {
   results: [],
   words: [],
   labels: [],
+  categories: [],
+  selectedCategory: null,
   selectedTextIds: [],
+  selectedLabelsIds: [],
   managementForm: {
     labelId: null,
     caseId: null,
@@ -30,13 +34,20 @@ const initialState = {
     isTrash: false,
   },
   subText: '',
+  page: null,
+  totalElements: null,
 };
 
 // Thunks
 
 export const getResults = createAsyncThunk('Get results', async (params) => {
-  const { processed = false, labelIds = [] } = params || {};
-  const response = await getResultsAPI(processed, labelIds);
+  const {
+    processed = false,
+    labelIds = [],
+    page = 0,
+    categoryId,
+  } = params || {};
+  const response = await getResultsAPI(processed, labelIds, page, categoryId);
   return response.data;
 });
 
@@ -44,24 +55,29 @@ export const getWords = createAsyncThunk('Get words', async () => {
   const response = await getWordsAPI();
   return response.data;
 });
-export const getLabels = createAsyncThunk('Get labels', async () => {
-  const response = await getLabelsAPI();
+export const getLabels = createAsyncThunk('Get labels', async (params) => {
+  const { categoryId } = params;
+  const response = await getLabelsAPI(categoryId);
+  return response.data;
+});
+
+export const getCategories = createAsyncThunk('Get categories', async () => {
+  const response = await getCategoriesAPI();
   return response.data;
 });
 
 export const addWord = createAsyncThunk('Add word', async (params) => {
   const { word, regexes, id } = params;
-  await addWordAPI(word, regexes, id);
 
-  const response = await getWordsAPI();
+  const response = await addWordAPI(word, regexes, id);
   return response.data;
 });
 
 export const addLabel = createAsyncThunk('Add label', async (params) => {
-  const { label, id, cases } = params;
-  await addLabelAPI(label, id, cases);
+  const { label, id, cases, categoryId } = params;
+  const response = await addLabelAPI(label, id, cases, categoryId);
 
-  const response = await getLabelsAPI();
+  // const response = await getLabelsAPI();
   return response.data;
 });
 
@@ -76,6 +92,9 @@ export const appSlice = createSlice({
     },
     setTextIds: (state, action) => {
       state.selectedTextIds = action.payload;
+    },
+    setLabelsIds: (state, action) => {
+      state.selectedLabelsIds = action.payload;
     },
     setSubText: (state, action) => {
       state.subText = action.payload;
@@ -96,16 +115,19 @@ export const appSlice = createSlice({
       state.labelForm = initialState.labelForm;
       state.selectedText = initialState.selectedText;
     },
-
-    //
     setManagementFormLabel: (state, action) => {
       state.managementForm = action.payload;
+    },
+    setCategoryId: (state, action) => {
+      state.selectedCategory = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(getResults.fulfilled, (state, { payload }) => {
       state.selectedTextIds = [];
-      state.results = payload;
+      state.results = payload.data;
+      state.page = payload.page;
+      state.totalElements = payload.totalElements;
     });
     builder.addCase(getWords.fulfilled, (state, { payload }) => {
       state.words = payload;
@@ -113,12 +135,9 @@ export const appSlice = createSlice({
     builder.addCase(getLabels.fulfilled, (state, { payload }) => {
       state.labels = payload;
     });
-    //
-    builder.addCase(addWord.fulfilled, (state, { payload }) => {
-      state.words = payload;
-    });
-    builder.addCase(addLabel.fulfilled, (state, { payload }) => {
-      state.labels = payload;
+    builder.addCase(getCategories.fulfilled, (state, { payload }) => {
+      state.categories = payload;
+      state.selectedCategory = payload[0].id;
     });
   },
 });
@@ -131,6 +150,8 @@ export const {
   resetForm,
   setSubText,
   setTextIds,
+  setLabelsIds,
+  setCategoryId,
   setManagementFormLabel,
 } = appSlice.actions;
 export default appSlice.reducer;

@@ -10,7 +10,7 @@ export const SelectedItems = () => {
       labels
         .filter(({ id }) => labelForm.human.some((i) => i.id === id))
         .map((i) => i.label),
-    [labelForm]
+    [labelForm.human, labels]
   );
 
   const report = useMemo(

@@ -1,5 +1,46 @@
 .Input {
-    margin: 10px 0;
+    padding-bottom: 16px;
     display: flex;
-    gap: 20px;
+    flex-direction: column;
+    /*gap: 20px;*/
+    background: #FFFFFF;
+    align-items: center;
+}
+
+.SearchLabel {
+    width: 100%;
+    padding-bottom: 5px;
+    border-bottom: 2px solid gray;
+}
+
+.Modal {
+    width: 80% !important;
+    top: 20px !important;
+}
+
+.Collapse {
+    height: 80vh;
+    overflow-y: auto;
+}
+
+.NewLabel {
+    width: 50%;
+    padding-top: 10px;
+    display: grid;
+    row-gap: 10px;
+    column-gap: 10px;
+    grid-template-areas: "a b"
+                         "c c";
+}
+
+.NewLabel input {
+    grid-area: a;
+}
+
+.NewLabel div {
+    grid-area: b;
+}
+
+.NewLabel button {
+    grid-area: c;
 }

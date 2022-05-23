@@ -1,13 +1,18 @@
 import { Button } from 'antd';
-import { useDispatch } from 'react-redux';
-import { getResults } from '../../store/appSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { getResults, resetForm } from '../../store/appSlice';
 
 export const ProcessedSwitcher = ({ isProcessed, setIsProcessed }) => {
   const dispatch = useDispatch();
 
+  const { selectedCategory } = useSelector((s) => s.app);
+
   const onClick = () => {
     setIsProcessed(!isProcessed);
-    dispatch(getResults({ processed: !isProcessed }));
+    dispatch(resetForm());
+    dispatch(
+      getResults({ processed: !isProcessed, categoryId: selectedCategory })
+    );
   };
 
   return (

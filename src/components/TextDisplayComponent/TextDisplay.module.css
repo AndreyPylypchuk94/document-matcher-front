@@ -1,12 +1,44 @@
 .Container {
+    position: relative;
     margin: 10px 0;
-    padding: 10px 5px;
     border: 2px solid black;
     border-radius: 10px;
     background: #dacfcf;
     max-height: 150px;
     overflow-y: auto;
 }
+
+:global .select-text {
+    background: blue;
+    color: white;
+}
+
+
+.Text {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    padding: 10px 5px;
+
+}
+
+.Background {
+    padding: 10px 5px;
+    color: transparent;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
+.Background::selection {
+    background: blue;
+    color: white;
+}
+
 
 .text {
     color: red;

@@ -2,21 +2,24 @@ import { Button, Input, Skeleton } from 'antd';
 import s from './LabelingComponent.module.css';
 import { useDispatch } from 'react-redux';
 import { setUserReportForm } from '../../store/appSlice';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
-export const UserReportsLabeling = ({ reports, formState, disabled }) => {
+export const UserReportsLabeling = ({
+  reports,
+  formState,
+  disabled,
+  value,
+  onChange,
+}) => {
   const dispatch = useDispatch();
 
-  const [text, setText] = useState('');
-
   const filteredReports = useMemo(() => {
-    const subString = text.toLowerCase();
+    const subString = value.toLowerCase();
 
     return reports?.filter(({ label }) =>
       label.toLowerCase().includes(subString)
     );
-  }, [reports, text]);
-
+  }, [reports, value]);
   const toggleSelectedIds = (id) => {
     if (!formState.includes(id)) {
       dispatch(setUserReportForm([...formState, id]));
@@ -26,23 +29,19 @@ export const UserReportsLabeling = ({ reports, formState, disabled }) => {
     dispatch(setUserReportForm(formState.filter((item) => item !== id)));
   };
 
-  const onChange = (e) => {
-    setText(e.target.value);
-  };
-
   return (
     <div disabled={disabled} className={s.Container}>
       <Input
         className={s.Title}
         onChange={onChange}
-        value={text}
+        value={value}
         placeholder="Enter label's cases to be used"
         style={{ backgroundColor: '#b68acc' }}
       />
 
       <div className={s.Labels}>
         {filteredReports?.length ? (
-          filteredReports.map((item, ind) => {
+          filteredReports.map((item) => {
             return (
               <Button
                 key={item.id}

@@ -4,7 +4,6 @@ import './LabelsTable.css';
 export const LabelsTable = ({
   title,
   tableData,
-  tableType,
   type,
   onChange,
   selectedId,
@@ -57,7 +56,7 @@ export const LabelsTable = ({
         dataIndex={type}
         className="LabelTable"
         align="CENTER"
-        render={(_, render) => (
+        render={() => (
           <Button
             type="link"
             onClick={() => {

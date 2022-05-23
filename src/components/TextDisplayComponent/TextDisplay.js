@@ -1,23 +1,21 @@
-import s from './TextDisplay.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { message } from 'antd';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo } from 'react';
 import { setSubText, setTextIds } from '../../store/appSlice';
-import { selectTextsSelector } from '../../store/selects/results';
+import {
+  selectSubTextSelector,
+  selectTextsSelector,
+} from '../../store/selects/results';
+import s from './TextDisplay.module.css';
 
-export const TextDisplay = ({ height }) => {
+export const TextDisplay = ({ height, isProccesed }) => {
   const selectedTexts = useSelector(selectTextsSelector);
+  const selectedSubText = useSelector(selectSubTextSelector);
   const { selectedTextIds, results } = useSelector((s) => s.app);
-  const alertMessages = useRef(false);
   const dispatch = useDispatch();
 
   const setSelectedText = () => {
     if (selectedTexts.length > 1) {
-      alertMessages.current = true;
       dispatch(setSubText(''));
-      message.info({
-        content: 'Word processing does not work in multichoice mode.',
-      });
       return;
     }
     dispatch(setSubText(window.getSelection().toString()));
@@ -27,14 +25,23 @@ export const TextDisplay = ({ height }) => {
     [selectedTexts]
   );
 
+  const processedText = useMemo(
+    () => selectedTexts.map((text) => text.formattedSubValue).join('<br/>'),
+    [selectedTexts]
+  );
+
   useEffect(() => {
     if (selectedTexts.length > 1) {
       dispatch(setSubText(window.getSelection().toString()));
     }
-    if (selectedTexts.length === 1) {
-      dispatch(setSubText(selectedTexts[0].value));
+
+    if (isProccesed) {
+      const prevItem = selectedTexts
+        .map((results) => results.selectedLabels.map((a) => a?.text).join(''))
+        .join('');
+      dispatch(setSubText(prevItem));
     }
-  }, [selectedTexts]);
+  }, [dispatch, isProccesed, selectedTexts]);
 
   useEffect(() => {
     if (height !== 560) return;
@@ -43,15 +50,32 @@ export const TextDisplay = ({ height }) => {
     }
   }, [height]);
 
+  useEffect(() => {
+    if (height === 560) {
+      dispatch(setTextIds([results[0].id]));
+    }
+  }, [results]);
+
   return (
     <div
-      style={{
-        minHeight: height,
-      }}
       className={s.Container}
-      onMouseUp={setSelectedText}
-      onDoubleClick={setSelectedText}
-      dangerouslySetInnerHTML={{ __html: text }}
-    />
+      style={{
+        height: height,
+        userSelect: selectedTexts.length > 1 || isProccesed ? 'none' : 'auto',
+      }}
+    >
+      <div
+        className={s.Text}
+        onMouseUp={setSelectedText}
+        onDoubleClick={setSelectedText}
+        dangerouslySetInnerHTML={{ __html: isProccesed ? processedText : text }}
+      />
+      <div
+        className={s.Background}
+        onMouseUp={setSelectedText}
+        onDoubleClick={setSelectedText}
+        dangerouslySetInnerHTML={{ __html: selectedSubText }}
+      />
+    </div>
   );
 };

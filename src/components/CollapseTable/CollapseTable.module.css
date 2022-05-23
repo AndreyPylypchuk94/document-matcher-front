@@ -46,6 +46,10 @@
     cursor: pointer;
 }
 
+.Switch {
+    width: 40%;
+}
+
 .Words input {
-    width: 50%;
+    width: 28%;
 }

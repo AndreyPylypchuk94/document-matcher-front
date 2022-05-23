@@ -10,7 +10,7 @@ export const TextSourceSwitcher = () => {
   const currentItemIndex = results.findIndex(
     (i) => i.id === selectedTextIds[0]
   );
-  const disabledPrevious = !currentItemIndex;
+  const disabledPrevious = currentItemIndex <= 0;
   const disabledNext = currentItemIndex === results.length - 1;
   const onNext = () => {
     dispatch(setTextIds([results[currentItemIndex + 1].id]));

@@ -22,15 +22,12 @@
 .Labels {
     display: flex;
     flex-wrap: wrap;
-
-    /*display: grid;*/
-    /*grid-template-columns: repeat(3, 30%);*/
-    /*grid-gap: 3px;*/
+    align-content: flex-start;
     overflow-y: scroll;
     overflow-x: hidden;
-    justify-content: center;
+    /*justify-content: center;*/
     max-width: 280px;
-    max-height: 400px;
+    height: 400px;
 }
 
 .Labels button {
@@ -38,7 +35,7 @@
     width: 100%;
     font-size: 0.8em;
     padding: 2px;
-    height: auto;
+    /*height: auto;*/
     text-indent: 2px;
     text-align: left;
     word-break: break-word;
@@ -61,7 +58,7 @@
     background-color: #858383;
     outline: 2px solid #FFF;
     outline-offset: -2px;
-    border: .1px solid #B7B7B7;
+    border: 1px solid #B7B7B7;
 }
 
 .Labels::-webkit-scrollbar-thumb:hover {

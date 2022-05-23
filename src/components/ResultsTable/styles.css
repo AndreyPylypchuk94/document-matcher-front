@@ -1,15 +1,28 @@
 table {
     background: #edeff3;
     cursor: pointer;
-    min-height: 200px !important;
+    /*max-height: 500px;*/
+    overflow-y: auto;
+
+    /*min-height: 200px !important;*/
 }
 
 table tbody tr td {
     padding: 3px !important;
 }
 
+.ant-table-body {
+    background: #edeff3;
+
+}
+
 .ant-table-wrapper.Main.Big table tbody tr td {
     padding: 30px 3px !important;
+
+}
+
+.ant-table-wrapper.Main.Big table tbody tr:first-child td {
+    padding: 0 !important;
 }
 
 
@@ -17,12 +30,27 @@ table tbody tr td {
     background: #a8a8be !important;
 }
 
-
 .ant-table-thead > tr > th.Main {
     background: #dedddd !important;
     cursor: default;
 }
 
+
 .ant-table-thead > tr > th.ant-table-selection-column {
     background: #dedddd !important;
+}
+
+.Label.buttons {
+    display: flex;
+    max-width: 200px;
+    flex-wrap: wrap;
+    max-height: 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    white-space: normal;
+}
+
+.Label.button span:hover {
+    text-decoration: underline !important;
+
 }
