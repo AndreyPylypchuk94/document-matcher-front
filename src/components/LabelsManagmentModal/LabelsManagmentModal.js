@@ -25,7 +25,7 @@ export const LabelsManagmentModal = () => {
     const { payload } = await dispatch(
       addLabel({
         label: labelName,
-        categoryId: labelCategory,
+        categoryId: selectedCategory,
       })
     );
 
@@ -94,7 +94,7 @@ export const LabelsManagmentModal = () => {
                     onPressEnter={addNewLabel}
                   />
                   <Select
-                    disabled={!labelName}
+                    disabled={true}
                     placeholder="Select category"
                     value={labelCategory}
                     allowClear
@@ -108,7 +108,7 @@ export const LabelsManagmentModal = () => {
                       </Select.Option>
                     ))}
                   </Select>
-                  <Button disabled={!labelCategory} onClick={addNewLabel}>
+                  <Button disabled={!labelName} onClick={addNewLabel}>
                     Add label
                   </Button>
                 </div>

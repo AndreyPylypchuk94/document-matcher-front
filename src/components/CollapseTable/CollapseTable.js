@@ -112,6 +112,8 @@ export const CollapseTable = ({ label }) => {
 
 const WordList = ({ wordIds, onChange, defaultShowAll = false }) => {
   const words = useSelector(selectWords);
+  const { selectedCategory } = useSelector((s) => s.app);
+
   const [wordValue, setWordValue] = useState('');
   const [isShowAll, setIsShowAll] = useState(defaultShowAll);
   const [filterValue, setFilterValue] = useState('');
@@ -141,9 +143,9 @@ const WordList = ({ wordIds, onChange, defaultShowAll = false }) => {
 
   const addNewWord = async () => {
     const { payload } = await dispatch(
-      addWord({ word: wordValue, regexes: [] })
+      addWord({ word: wordValue, regexes: [], categoryId: selectedCategory })
     );
-    await dispatch(getWords());
+    await dispatch(getWords({ categoryId: selectedCategory }));
     if (payload?.id) {
       setNewWordId(payload.id);
       console.log(payload.id, wordRef.current);
@@ -220,6 +222,8 @@ const WordList = ({ wordIds, onChange, defaultShowAll = false }) => {
 const TagList = ({ regexes, wordId, word }) => {
   const dispatch = useDispatch();
 
+  const { selectedCategory } = useSelector((s) => s.app);
+
   const [isInputVisible, setIsInputVisible] = useState(false);
   const [selectedTagId, setSelectedTagId] = useState(null);
   const [newTagValue, setNewTagValue] = useState('');
@@ -234,9 +238,10 @@ const TagList = ({ regexes, wordId, word }) => {
           id: typeof wordId === 'number' ? wordId : undefined,
           word,
           regexes: regexes?.length ? [...regexes, newTagValue] : [newTagValue],
+          categoryId: selectedCategory,
         })
       );
-      await dispatch(getWords());
+      await dispatch(getWords({ categoryId: selectedCategory }));
       setIsInputVisible(false);
       setNewTagValue('');
     }
@@ -250,10 +255,11 @@ const TagList = ({ regexes, wordId, word }) => {
           id: wordId,
           word,
           regexes: [...newRegexes, editTagValue],
+          categoryId: selectedCategory,
         })
       );
     }
-    await dispatch(getWords());
+    await dispatch(getWords({ categoryId: selectedCategory }));
     setSelectedTagId(null);
     setEditTagValue('');
   };
@@ -265,9 +271,10 @@ const TagList = ({ regexes, wordId, word }) => {
         id: wordId,
         word,
         regexes: newRegexes,
+        categoryId: selectedCategory,
       })
     );
-    await dispatch(getWords());
+    await dispatch(getWords({ categoryId: selectedCategory }));
   };
 
   const onNewTag = (event) => {

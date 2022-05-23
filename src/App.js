@@ -40,12 +40,12 @@ function App() {
   };
 
   useEffect(() => {
-    dispatch(getWords());
     dispatch(getCategories());
   }, []);
 
   useEffect(() => {
     if (!selectedCategory) return;
+    dispatch(getWords({ categoryId: selectedCategory }));
     dispatch(getLabels({ categoryId: selectedCategory }));
     dispatch(getResults({ categoryId: selectedCategory }));
     setIsProcessed(false);
